@@ -127,20 +127,17 @@ class Tablero():
                 unicos[x0]=unicos[x0]+self.columnas[y0][x0]
 
         # Despues de haber sumado obtenemos los renglones que aportan un minitermino único
-        print(len(unicos))
-        print(x)
         numTermino:renglon=[]
         for x0 in range(0,x):
             y0=0
             if unicos[x0]==1:
-                while y0<y:
+                while y0<len(self.columnas):
                     # Buscamos el renglon que tenga el minitemino
                     if self.columnas[y0][x0]==1:
                         nuevo=self.renglonesHoja.pop(y0)
                         renglonesResultantes.append(nuevo)
                         unicos= self.apagar1s(unicos, self.columnas[y0])
-                        print(len(unicos))
-                        self.columnas[y0]=self.apagar1s(unicos,self.columnas[y0],True)
+                        self.columnas.pop(y0)
                         break
                     y0=y0+1
 
@@ -158,14 +155,13 @@ class Tablero():
         for x0 in range(0,x):
             y0=0
             if unicos[x0]==1:
-                while y0<y-1:
+                while y0<len(self.columnas):
                     # Buscamos el renglon que tenga el minitemino
                     if self.columnas[y0][x0]==1:
                         nuevo=self.renglonesHoja.pop(y0)
                         renglonesResultantes.append(nuevo)
                         unicos= self.apagar1s(unicos, self.columnas[y0])
-                        print(len(unicos))
-                        self.columnas[y0]=self.apagar1s(unicos,self.columnas[y0],True)
+                        self.columnas.pop(y0)
                         break
                     y0=y0+1
         self.renglonesResultado=renglonesResultantes.copy()
