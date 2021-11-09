@@ -1,6 +1,7 @@
 import tabla
 import tablero
 from os.path import exists
+import sys
 
 def leerArchivo()->list:
     if exists('input.txt'):
@@ -52,6 +53,7 @@ def pedirDontCare()->int:
 
 
 def main():
+
     miniterminos=int()
     numVariables=int()
     indiceDontCare=int()
@@ -64,27 +66,37 @@ def main():
         numVariables=pedirVariables()
         indiceDontCare=pedirDontCare()
         miniterminos=pedirMiniterminos()
-
-    # Crear tabla de minimizacion
     
-    table=tabla.tabla(miniterminos, numVariables)
-    
-    #print('Miniterminos iniciales:')
-    #table.imprimir2()
-    while 0<len(table.renglones):
-        table.ordenarRenglon()
-    table.eliminarRepetidos()
-    print('Tabla de minimizaciones')
-    table.imprimir()
+    original_stdout = sys.stdout # Save a reference to the original standard output
+
+    with open('output.txt', 'w') as f:
+        sys.stdout = f # Change the standard output to the file we created.
+
+
+        
+
+        # Crear tabla de minimizacion
+        
+        table=tabla.tabla(miniterminos, numVariables)
+        
+        #print('Miniterminos iniciales:')
+        #table.imprimir2()
+        while 0<len(table.renglones):
+            table.ordenarRenglon()
+        table.eliminarRepetidos()
+        print('Tabla de minimizaciones')
+        table.imprimir()
 
 
 
-    
-    tablerro=tablero.Tablero(miniterminos, table.oldRenglones,indiceDontCare)
-    tablerro.minimizar()
+        
+        tablerro=tablero.Tablero(miniterminos, table.oldRenglones,indiceDontCare)
+        tablerro.minimizar()
 
-    print('\n Miniterminos Resultado')
-    tablerro.imprimir()
+        print('\n Miniterminos Resultado')
+        tablerro.imprimir()
+        sys.stdout = original_stdout # Reset the standard output to its original value
+    print('archivo output.txt generado')
     
 
 if __name__ == '__main__':
