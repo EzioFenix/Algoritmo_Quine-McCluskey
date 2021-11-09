@@ -23,13 +23,25 @@ class tabla():
             
 
     def imprimir(self):
-        texto="{:<3}| {:<2} | {:<16} \t| {:<30} \t|".format("generacion",'indice','bits','miniterminos')
+        print("{}{}{}".format("┌","─"*87,"┐"))
+        texto="│{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format("generacion",'indice','bits','miniterminos')
+        print(texto)
+        numGeneracion=0
         for mini in self.oldRenglones:
+            if mini.generacion== numGeneracion:
+                print("{}{}{}".format("├","─"*87,"┤"))
+                numGeneracion+=1
             print(mini)
+        print("{}{}{}".format("└","─"*87,"┘"))
 
     def imprimir2(self):
         texto="{:<10} \t| {:<10} \t| {:<10} \t| {:<30} \t|".format("generacion",'indice','bits','miniterminos')
+        print(texto)
+        numGeneracion=0
         for mini in self.renglones:
+            if mini.generacion== numGeneracion:
+                print("{}".format("─"*80))
+                #numGeneracion+=1
             print(mini)
 
 

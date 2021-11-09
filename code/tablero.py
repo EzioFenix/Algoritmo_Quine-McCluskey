@@ -10,10 +10,33 @@ class Tablero():
         self.columnas=[]
         self.obtenerHojas(oldRenglones)
     
+    def arrregloBitsToLetras(self,arreglo:list):
+        letras=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        aux=[]
+        for  x0 in range(len(arreglo)):
+            if arreglo[x0]=='1':
+                aux.append(letras[x0])
+            elif arreglo[x0]=='0':
+                aux.append(letras[x0]+"'")
+        return aux.copy()
 
     def imprimir(self):
+        aux=[]
+        print("{}{}{}".format("┌","─"*87,"┐"))
+        texto="|{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format("generacion",'indice','bits','miniterminos')
+        print(texto)
+        print("{}{}{}".format("├","─"*87,"┤"))
         for i in self.renglonesResultado:
+            aux.append(i.bits)
             print(i)
+        print("{}{}{}".format("└","─"*87,"┘"))
+
+        aux2=[self.arrregloBitsToLetras(i) for i in aux]
+        aux3=[]
+        for i in aux2:
+            aux3.append("".join(i))
+        aux3=" + ".join(aux3)
+        print('\n fsp=',aux3)
     
     def minimizar(self):
         self.crearIndice()
@@ -72,7 +95,6 @@ class Tablero():
             for x0 in range(0,x):
                 columnas[y0].append(0)
         self.columnas=columnas.copy()
-        print(self.columnas)
 
 
     def llenarTablero(self):
@@ -84,6 +106,7 @@ class Tablero():
                 x=self.indices[mini]
                 self.columnas[y][x]=1
             y=y+1
+
 
 
     def apagar1s(self,arreglo,arreglo2,todas=False)->list:
@@ -121,7 +144,6 @@ class Tablero():
         y=len(self.renglonesHoja)
         x=len(self.indices)
 
-        print("{}x{}".format(str(y),str(x)))
         #En el arreglo unicos, donde tenga un 1 es aquel que sólo hay un minitermino que lo contiene
         #suma los 1's por columnas
         unicos=[]
@@ -129,6 +151,34 @@ class Tablero():
             unicos.append(0)
             for y0 in range(y):
                 unicos[x0]=unicos[x0]+self.columnas[y0][x0]
+        
+        #----------------------------------------------------
+        print('\nTabla de implicaciones \n')
+        
+        texto2=""
+        for mini in self.miniterminos:
+            texto2 +="│{:<3}".format(str(mini))
+
+        texto="│ {:<30}{}│".format("Implicante primo",texto2)
+
+        numEspacios=len(texto)-2
+        print("{}{}{}".format("┌","─"*numEspacios,"┐"))
+        print(texto)
+        print("{}{}{}".format("├","─"*numEspacios,"┤")) 
+
+        for y0 in range(y):
+            textoMiniterminos= self.renglonesHoja[y0].miniterminosStr()
+
+            # convetir columnas
+            textoColumnas=[str(i) for i in self.columnas[y0]]
+            aux=""
+            for i in textoColumnas:
+                aux+="│{:<3}".format(i)
+
+            texto="│ {:<30}{}│".format(textoMiniterminos,aux)
+            print(texto)
+        print("{}{}{}".format("└","─"*numEspacios,"┘")) 
+        #----------------------------------------------------
 
         # Despues de haber sumado obtenemos los renglones que aportan un minitermino único
         numTermino:renglon=[]

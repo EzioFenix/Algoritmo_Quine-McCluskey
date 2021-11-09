@@ -9,6 +9,11 @@ class renglon ():
         # Numero de minitermino en caso de que sea  la primera tabla generado
 
     
+    def miniterminosStr(self)->str:
+        aux=[str(i)  for i in self.miniterminosSimpli]
+        aux=",".join(aux)
+        return aux
+
     def __eq__(self, other):
         if (self.generacion ==other.generacion) and (self.miniterminosSimpli==other.miniterminosSimpli) and (self.bits==other.bits):
             return True
@@ -19,7 +24,7 @@ class renglon ():
     def __repr__(self):
         aux3=[str(x) for x in self.miniterminosSimpli]
         aux3=','.join(aux3)
-        return "{:<10} \t| {:<10} \t| {:<10} \t| {:<30} \t|".format(self.generacion,self.indice,self.bits,aux3)
+        return "│{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format(self.generacion,self.indice,self.bits,aux3)
 
     def primeraGeneracion(self,numVariables:int):
         """Método para inicializar a la primera generación de la tabla
@@ -104,7 +109,6 @@ class renglon ():
         #mini.extend(self.miniterminosSimpli)
         #mini.extend(other.miniterminosSimpli)
         minis= sorted(self.miniterminosSimpli + other.miniterminosSimpli)
-        print(minis)
         nuevo=renglon(0,self.generacion +1,aux,minis)
         nuevo.nextGeneration()
 

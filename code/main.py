@@ -4,7 +4,7 @@ from os.path import exists
 
 def leerArchivo()->list:
     if exists('input.txt'):
-        print('Archivo input.txt encontrado')
+        print('Archivo input.txt encontrado =D\n')
     with open('input.txt') as f:
         aux=f.readline()
     aux=aux.split(',')
@@ -66,17 +66,24 @@ def main():
         miniterminos=pedirMiniterminos()
 
     # Crear tabla de minimizacion
+    
     table=tabla.tabla(miniterminos, numVariables)
     
-    table.imprimir2()
+    #print('Miniterminos iniciales:')
+    #table.imprimir2()
     while 0<len(table.renglones):
         table.ordenarRenglon()
-    #print(len(table.renglones))
     table.eliminarRepetidos()
-    #table.imprimir()
+    print('Tabla de minimizaciones')
+    table.imprimir()
 
+
+
+    
     tablerro=tablero.Tablero(miniterminos, table.oldRenglones,indiceDontCare)
     tablerro.minimizar()
+
+    print('\n Miniterminos Resultado')
     tablerro.imprimir()
     
 
