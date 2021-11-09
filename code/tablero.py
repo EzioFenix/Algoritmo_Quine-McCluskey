@@ -1,10 +1,11 @@
 import renglon
 class Tablero():
 
-    def __init__(self,miniterminos:list,oldRenglones:list):
+    def __init__(self,miniterminos:list,oldRenglones:list,indiceDontCare:int):
         self.renglonesHoja=[]
         self.renglonesResultado=[]
         self.miniterminos=miniterminos
+        self.indiceDontCare=indiceDontCare
         self.indices={}
         self.columnas=[]
         self.obtenerHojas(oldRenglones)
@@ -19,6 +20,9 @@ class Tablero():
         self.build()
         self.llenarTablero()
         self.seleccionarMiniterminos()
+        # El minitermino tiene que ser mayores a 0
+        if -1<self.indiceDontCare: 
+            self.eliminarDontCare()
 
 
     def crearIndice(self):
@@ -165,4 +169,25 @@ class Tablero():
                         break
                     y0=y0+1
         self.renglonesResultado=renglonesResultantes.copy()
+
+    def obtenerArregloDontCare(self)->list:
+        indice =self.miniterminos.index(self.indiceDontCare)
+        return self.miniterminos[indice:].copy()
+
+
+    def eliminarDontCare(self):
+        y0=0
+        arregloDontCare=self.obtenerArregloDontCare()
+        while y0 <len(self.renglonesResultado):
+            numMiniterminosSimpli=len(self.renglonesResultado[y0].miniterminosSimpli)
+            contadorDontCare=0
+            for minitermino in self.renglonesResultado[y0].miniterminosSimpli:
+                if minitermino in arregloDontCare:
+                    contadorDontCare+=1
+            if numMiniterminosSimpli==contadorDontCare:
+                self.renglonesResultado.pop(y0)
+            else:
+                y0+=1
+                
+
         
