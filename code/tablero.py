@@ -20,6 +20,29 @@ class Tablero():
                 aux.append(letras[x0]+"'")
         return aux.copy()
 
+
+    def imprimirV2(self):
+        with open("output.txt","a") as f:
+            f.write('\n Miniterminos Resultado' + "\n")
+            aux=[]
+            f.write("{}{}{}".format("┌","─"*83,"┐") + "\n")
+            texto="|{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format("generacion",'indice','bits','miniterminos')
+            f.write(texto + "\n")
+            f.write("{}{}{}".format("├","─"*83,"┤") + "\n")
+            for i in self.renglonesResultado:
+                aux.append(i.bits)
+                f.write(i.toStr() + "\n")
+            f.write("{}{}{}".format("└","─"*83,"┘") + "\n")
+
+            aux2=[self.arrregloBitsToLetras(i) for i in aux]
+            aux3=[]
+            for i in aux2:
+                aux3.append("".join(i))
+            aux3=" + ".join(aux3)
+            f.write('\n\n fsp=')
+            f.write(aux3)
+
+
     def imprimir(self):
         aux=[]
         print("{}{}{}".format("┌","─"*87,"┐"))
@@ -42,7 +65,7 @@ class Tablero():
         self.crearIndice()
         self.build()
         self.llenarTablero()
-        self.seleccionarMiniterminos()
+        self.seleccionarMiniterminosV2()
         # El minitermino tiene que ser mayores a 0
         if -1<self.indiceDontCare: 
             self.eliminarDontCare()
@@ -135,6 +158,92 @@ class Tablero():
                 elif arreglo[i]>=1 and arreglo2[i]==0 or (arreglo[i]==0 and arreglo2[i]>=1):
                     nuevo.append(1)
         return nuevo
+
+
+    def seleccionarMiniterminosV2(self):
+        """Selecciona a los miniterminos que conforman la minimización total
+        """
+        with open("output.txt",'a') as f:
+            renglonesResultantes=[]
+            y=len(self.renglonesHoja)
+            x=len(self.indices)
+
+            #En el arreglo unicos, donde tenga un 1 es aquel que sólo hay un minitermino que lo contiene
+            #suma los 1's por columnas
+            unicos=[]
+            for x0 in range(x):
+                unicos.append(0)
+                for y0 in range(y):
+                    unicos[x0]=unicos[x0]+self.columnas[y0][x0]
+            
+            #----------------------------------------------------
+            f.write('\nTabla de implicaciones \n')
+            
+            texto2=""
+            for mini in self.miniterminos:
+                texto2 +="│{:<3}".format(str(mini))
+
+            texto="│ {:<30}{}│".format("Implicante primo",texto2)
+
+            numEspacios=len(texto)-2
+            f.write("{}{}{}".format("┌","─"*numEspacios,"┐") + "\n")
+            f.write(texto + "\n")
+            f.write("{}{}{}".format("├","─"*numEspacios,"┤") + "\n") 
+
+            for y0 in range(y):
+                textoMiniterminos= self.renglonesHoja[y0].miniterminosStr()
+
+                # convetir columnas
+                textoColumnas=[str(i) for i in self.columnas[y0]]
+                aux=""
+                for i in textoColumnas:
+                    aux+="│{:<3}".format(i)
+
+                texto="│ {:<30}{}│".format(textoMiniterminos,aux)
+                f.write(texto + "\n")
+            f.write("{}{}{}".format("└","─"*numEspacios,"┘") + "\n") 
+            #----------------------------------------------------
+
+            # Despues de haber sumado obtenemos los renglones que aportan un minitermino único
+            numTermino:renglon=[]
+            for x0 in range(0,x):
+                y0=0
+                if unicos[x0]==1:
+                    while y0<len(self.columnas):
+                        # Buscamos el renglon que tenga el minitemino
+                        if self.columnas[y0][x0]==1:
+                            nuevo=self.renglonesHoja.pop(y0)
+                            renglonesResultantes.append(nuevo)
+                            unicos= self.apagar1s(unicos, self.columnas[y0])
+                            self.columnas.pop(y0)
+                            break
+                        y0=y0+1
+
+            
+            # Obtener los terminos no unicos-----------------------
+
+            # Ponemos a 1 todos los terminos no 0 de unicos
+            for i in range(len(unicos)):
+                if unicos[i]>0:
+                    unicos[i]=1
+
+
+            # Cambiar esta parte por un algoritmo greedy después
+            numTermino:renglon=[]
+            for x0 in range(0,x):
+                y0=0
+                if unicos[x0]==1:
+                    while y0<len(self.columnas):
+                        # Buscamos el renglon que tenga el minitemino
+                        if self.columnas[y0][x0]==1:
+                            nuevo=self.renglonesHoja.pop(y0)
+                            renglonesResultantes.append(nuevo)
+                            unicos= self.apagar1s(unicos, self.columnas[y0])
+                            self.columnas.pop(y0)
+                            break
+                        y0=y0+1
+            self.renglonesResultado=renglonesResultantes.copy()
+
 
 
     def seleccionarMiniterminos(self):

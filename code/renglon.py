@@ -20,7 +20,11 @@ class renglon ():
         else:
             return False
 
-    
+    def toStr(self):
+        aux3=[str(x) for x in self.miniterminosSimpli]
+        aux3=','.join(aux3)
+        return "│{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format(self.generacion,self.indice,self.bits,aux3)
+
     def __repr__(self):
         aux3=[str(x) for x in self.miniterminosSimpli]
         aux3=','.join(aux3)

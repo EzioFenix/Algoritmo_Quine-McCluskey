@@ -16,7 +16,9 @@ def leerArchivo()->list:
 
 def pedirVariables()->int:
     print('Ingresa el número de variables')
-    numVariables=int(input('-'))
+    numVariables=sys.stdin.readline()
+    numVariables=numVariables[:-1]
+    numVariables=int(numVariables)
     return numVariables
 
 def pedirMiniterminos()->list:
@@ -26,11 +28,11 @@ def pedirMiniterminos()->list:
         list: [numVariables,minitermino1,mini2,...,minitermino-n]
     """
     print('Ingresa el número de miniterminos, por ejemplo 1, intro 2, intro 5, ingresa t para terminar de ingresar')
-    aux='f'
+    aux=''
     aux2=[]
-    aux.append(numVariables)
     while aux!='t':
-        aux=input('-')
+        aux=sys.stdin.readline()
+        aux=aux[:-1]
         if aux!='t':
             aux2.append(int(aux))
     return aux2.copy()
@@ -42,10 +44,12 @@ def pedirDontCare()->int:
         int: [description]
     """
     print('¿Tiene miniterminots don´t care? s=si, n=no')
-    aux=input('-')
+    aux=sys.stdin.readline()
+    aux=aux[:-1]
     if aux=='s' or aux=='S':
         print('De los miniterminos ingresados, cual es el primer termino don´t care que aparece de izquierda a derecha')
-        aux2=input('-')
+        aux2=sys.stdin.readline()
+        aux=aux[:-1]
         print('Entendido, don´t care introducido')
         return int(aux2)
     else:
@@ -70,7 +74,7 @@ def main():
     original_stdout = sys.stdout # Save a reference to the original standard output
 
     with open('output.txt', 'w') as f:
-        sys.stdout = f # Change the standard output to the file we created.
+        #sys.stdout = f # Change the standard output to the file we created.
 
 
         
@@ -84,8 +88,8 @@ def main():
         while 0<len(table.renglones):
             table.ordenarRenglon()
         table.eliminarRepetidos()
-        print('Tabla de minimizaciones')
-        table.imprimir()
+        
+        table.imprimirV2()
 
 
 
@@ -93,18 +97,12 @@ def main():
         tablerro=tablero.Tablero(miniterminos, table.oldRenglones,indiceDontCare)
         tablerro.minimizar()
 
-        print('\n Miniterminos Resultado')
-        tablerro.imprimir()
-        sys.stdout = original_stdout # Reset the standard output to its original value
-    print('archivo output.txt generado')
+        
+        tablerro.imprimirV2()
+        #sys.stdout = original_stdout # Reset the standard output to its original value
+        f.write("\n Tabla de minimizaciones \n")
     
 
 if __name__ == '__main__':
     main()
-    """ if
-    test=True
-    if test==True:
-        unittest.main()
-    else:
-        numVariables,miniterminos=pantallaInicio()
-        programa(miniterminos, numVariables) """
+    

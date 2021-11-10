@@ -20,19 +20,33 @@ class tabla():
             else:
                 i=i+1
 
-            
+    def imprimirV2(self):
+
+            with open('output.txt','a') as f:
+                f.write("\n \n Tabla de minimizaciones \n")
+                f.write("{}{}{}".format("-","-"*83,"-") + "\n")
+                texto="│{:<10} \t|{:<10} \t| {:<10} \t| {:<30} \t|".format("generacion",'indice','bits','miniterminos')
+                f.write(texto + "\n")
+                numGeneracion=0
+                for mini in self.oldRenglones:
+                    if mini.generacion== numGeneracion:
+                        f.write("{}{}{}".format("-","-"*83,"-") + "\n")
+                        numGeneracion+=1
+                    f.write(mini.toStr() + "\n")
+                f.write("{}{}{}".format("└","-"*83,"┘") + "\n")
+
 
     def imprimir(self):
-        print("{}{}{}".format("┌","─"*87,"┐"))
-        texto="│{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format("generacion",'indice','bits','miniterminos')
-        print(texto)
-        numGeneracion=0
-        for mini in self.oldRenglones:
-            if mini.generacion== numGeneracion:
-                print("{}{}{}".format("├","─"*87,"┤"))
-                numGeneracion+=1
-            print(mini)
-        print("{}{}{}".format("└","─"*87,"┘"))
+            print("{}{}{}".format("-","-"*87,"-"))
+            texto="│{:<10} \t│ {:<10} \t│ {:<10} \t│ {:<30} \t│".format("generacion",'indice','bits','miniterminos')
+            print(texto)
+            numGeneracion=0
+            for mini in self.oldRenglones:
+                if mini.generacion== numGeneracion:
+                    print("{}{}{}".format("├","-"*87,"┤"))
+                    numGeneracion+=1
+                print(mini)
+            print("{}{}{}".format("└","-"*87,"┘"))
 
     def imprimir2(self):
         texto="{:<10} \t| {:<10} \t| {:<10} \t| {:<30} \t|".format("generacion",'indice','bits','miniterminos')
@@ -40,7 +54,7 @@ class tabla():
         numGeneracion=0
         for mini in self.renglones:
             if mini.generacion== numGeneracion:
-                print("{}".format("─"*80))
+                print("{}".format("-"*80))
                 #numGeneracion+=1
             print(mini)
 
